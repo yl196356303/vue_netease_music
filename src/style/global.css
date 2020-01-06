@@ -1,0 +1,25 @@
+/*全局样式文件*/
+html, body, #app {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+    width: 100%;
+}
+
+.el-card {
+    border: 0;
+    box-shadow: none!important;
+}
+
+.el-card__header {
+    padding: 18px 0 5px;
+}
+
+.el-card__body {
+    padding: 10px 0;
+}
