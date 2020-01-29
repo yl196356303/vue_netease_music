@@ -9,7 +9,7 @@
         <li>
           <div class="popularInfo">{{item.copywriter}}</div>
           <el-image
-            :src="item.picUrl"></el-image>
+            :src="item.picUrl" lazy></el-image>
           <span class="popularPlay el-icon-caret-right"></span>
         </li>
         <p>{{item.name}}</p>

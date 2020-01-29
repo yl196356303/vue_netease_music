@@ -27,67 +27,45 @@
     </el-header>
     <!--页面主体区域-->
     <el-container>
+      <!--歌曲详情区域-->
+      <div :class="{'mainMask': true, 'isMainMask': isLyric}">
+        <SongInfo/>
+      </div>
+      <!--mv详情区域-->
+      <div
+        v-if="path"
+        class="mvDetail isMainMask">
+        <router-view name="mv"></router-view>
+      </div>
       <!--左侧导航栏-->
-      <el-aside width="200px">
-        <span class="item-span">推荐</span>
-        <ul>
-          <li>
-            <i class="iconfont icon-yinle"></i>
-            <span>发现音乐</span>
-          </li>
-          <li>
-            <i class="iconfont icon-FM"></i>
-            <span>私人FM</span>
-          </li>
-          <li>
-            <i class="iconfont icon-shipin"></i>
-            <span>视频</span>
-          </li>
-          <li>
-            <i class="iconfont icon-pengyou"></i>
-            <span>朋友</span>
-          </li>
-        </ul>
-        <span class="item-span">我的音乐</span>
-        <ul>
-          <li>
-            <i class="iconfont icon-bendiyinle"></i>
-            <span>本地音乐</span>
-          </li>
-          <li>
-            <i class="iconfont icon-xiazai"></i>
-            <span>下载管理</span>
-          </li>
-          <li>
-            <i class="iconfont icon-yunpan"></i>
-            <span>我的音乐云盘</span>
-          </li>
-          <li>
-            <i class="iconfont icon-wodeshoucang"></i>
-            <span>我的收藏</span>
-          </li>
-        </ul>
-        <el-collapse>
-          <el-collapse-item title="创建的歌单">
-            <i class="iconfont icon-yinleliebiao"></i>
-            <span>我的收藏</span>
-          </el-collapse-item>
-          <el-collapse-item title="收藏的歌单">
-            <i class="iconfont icon-yinleliebiao"></i>
-            <span>我的收藏</span>
-          </el-collapse-item>
-        </el-collapse>
-        <div class="song">
-          <div class="songInfo">
-            <img src="https://p1.music.126.net/PJNV84mjt_mDXEkxtjzB4w==/18957779486268444.jpg?param=400y400">
+      <el-aside width="200px" :class="{'isHeight': JSON.stringify(currentSong) === '{}'}">
+        <div class="menu-item" v-for="(list, listIndex) in title" :key="listIndex">
+          <span class="item-span">{{list.name}}</span>
+          <ul>
+            <li
+              :class="loop(listIndex, index)"
+              v-for="(item, index) in menu[listIndex]"
+              :key="index"
+              @click="switchMenu(index, listIndex, item.path)">
+              <i :class="item.icon"></i>
+              <span>{{item.title}}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="song" v-if="JSON.stringify(currentSong) !== '{}'">
+          <div
+            class="songInfo">
+            <el-image v-if="currentSong.al" :src="currentSong.al.picUrl"></el-image>
+            <el-image v-else-if="currentSong.album" :src="currentSong.album.picUrl"></el-image>
             <!--遮罩-->
-            <div class="mask">
+            <div class="mask" @click="switchIsLyric">
               <span class="el-icon-arrow-down"></span>
               <span class="el-icon-arrow-up"></span>
             </div>
             <div class="introduce">
-              <p>歌曲</p>
-              <p>歌手</p>
+              <p>{{currentSong.name}}</p>
+              <p v-if="currentSong.ar">{{currentSong.ar[0].name}}</p>
+              <p v-else-if="currentSong.artists">{{currentSong.artists[0].name}}</p>
             </div>
           </div>
           <div class="share">
@@ -102,74 +80,173 @@
         <router-view></router-view>
       </el-main>
     </el-container>
+    <!--播放列表-->
+    <PlaylistCard v-if="isPlaylist"/>
     <!-- 底部播放区域-->
     <el-footer>
-      <el-row>
-        <el-col :span="3">
-          <div class="footer_left">
-            <span class="iconfont icon-ai10"></span>
-            <span class="iconfont icon-bofang"></span>
-            <span class="iconfont icon-ai09"></span>
-          </div>
-        </el-col>
-        <el-col :span="18">
-          <div class="footer_slider">
-            <span>00:00</span>
-            <el-slider
-              class="progress"
-              v-model="value"
-              :format-tooltip="formatTooltip">
-            </el-slider>
-            <span>00:00</span>
-            <span class="iconfont icon-yinliang"></span>
-            <el-slider
-              class="volume"
-              v-model="value">
-            </el-slider>
-          </div>
-        </el-col>
-        <el-col :span="3">
-          <div class="footer_right">
-            <span class="iconfont icon-catalog_btn_order"></span>
-            <span class="iconfont icon-plist"></span>
-            <span class="iconfont icon-github"></span>
-          </div>
-        </el-col>
-      </el-row>
+      <MiniPlay/>
     </el-footer>
   </el-container>
 </template>
 
 <script>
+import {
+  mapState,
+  mapActions
+} from 'vuex'
+import MiniPlay from './miniPlay-card.vue'
+import PlaylistCard from './playllist-card.vue'
+import SongInfo from './songInfo-card.vue'
+
 export default {
   data () {
     return {
-      value: 36,
+      title: [
+        { name: '推荐' },
+        { name: '我的音乐' },
+        { name: '创建的歌单' },
+        { name: '收藏的歌单' }
+      ],
+      menu: [
+        [
+          {
+            title: '发现音乐',
+            icon: 'iconfont icon-yinle',
+            path: 'discovery'
+          },
+          {
+            title: '私人FM',
+            icon: 'iconfont icon-FM',
+            path: 'fm'
+          },
+          {
+            title: 'MV',
+            icon: 'iconfont icon-shipin',
+            path: 'mvs'
+          },
+          {
+            title: '朋友',
+            icon: 'iconfont icon-pengyou',
+            path: 'dynamic'
+          }
+        ],
+        [
+          {
+            title: '本地音乐',
+            icon: 'iconfont icon-bendiyinle',
+            path: 'local'
+          },
+          {
+            title: '下载管理',
+            icon: 'iconfont icon-xiazai',
+            path: 'download'
+          },
+          {
+            title: '我的音乐云盘',
+            icon: 'iconfont icon-yunpan',
+            path: 'cloud'
+          },
+          {
+            title: '我的收藏',
+            icon: 'iconfont icon-wodeshoucang',
+            path: 'collection'
+          }
+        ],
+        [
+          {
+            title: '我的收藏',
+            icon: 'iconfont icon-yinleliebiao',
+            path: 'myestablish'
+          }
+        ],
+        [
+          {
+            title: '我的收藏',
+            icon: 'iconfont icon-yinleliebiao',
+            path: 'mycollection'
+          }
+        ]
+      ],
+      currentIndex: 0,
       value1: ''
     }
   },
+  created () {
+    this.currentIndex = Number(window.sessionStorage.getItem('currentIndex'))
+  },
   methods: {
-    formatTooltip (val) {
-      return val / 100
-    }
-  }
+    loop (listIndex, index) {
+      if ((
+        listIndex === 0 && this.currentIndex === index
+      ) || (
+        listIndex === 1 && this.currentIndex === (
+          index + this.menu[listIndex - 1].length)
+      ) || (
+        listIndex === 2 && this.currentIndex === (
+          index + this.menu[listIndex - 1].length + this.menu[listIndex - 2].length)
+      ) || (
+        listIndex === 3 && this.currentIndex === (
+          index + this.menu[listIndex - 1].length + this.menu[listIndex - 2].length + this.menu[listIndex - 3].length)
+      )) {
+        return 'active'
+      } else {
+        return ''
+      }
+    },
+    switchMenu (index, listIndex, paht) {
+      switch (listIndex) {
+        case 0:
+          this.currentIndex = index
+          window.sessionStorage.setItem('currentIndex', this.currentIndex)
+          break
+        case 1:
+          this.currentIndex = (
+            index + this.menu[listIndex - 1].length)
+          window.sessionStorage.setItem('currentIndex', this.currentIndex)
+          break
+        case 2:
+          this.currentIndex = (
+            index + this.menu[listIndex - 1].length + this.menu[listIndex - 2].length)
+          window.sessionStorage.setItem('currentIndex', this.currentIndex)
+          break
+        case 3:
+          this.currentIndex = (
+            index + this.menu[listIndex - 1].length + this.menu[listIndex - 2].length + this.menu[listIndex - 3].length)
+          window.sessionStorage.setItem('currentIndex', this.currentIndex)
+          break
+        default:
+          this.$message.error('出错啦~')
+      }
+      this.$router.push({ name: paht })
+    },
+
+    ...mapActions(['switchIsLyric'])
+  },
+  computed: {
+    path () {
+      return this.$route.path.includes('/mv/')
+    },
+
+    ...mapState([
+      'currentSong',
+      'isPlaylist',
+      'isLyric'
+    ])
+  },
+  components: { MiniPlay, PlaylistCard, SongInfo }
 }
 </script>
 
 <style lang="scss" type="text/scss">
-
-  .el-main {
-    padding: 10px 35px!important;
-  }
-
   .el-header {
     background-color: #C62F2F;
-    height: 65px!important;
+    height: 65px !important;
     display: flex;
     align-items: center;
 
     .home_header_logo {
       line-height: 24px;
+
       span {
         &:first-of-type {
           display: inline-block;
@@ -218,7 +295,7 @@ export default {
         margin-left: 20px;
         border: 0;
         width: 280px;
-        height: 30px!important;
+        height: 30px !important;
         font-size: 12px;
         background-color: rgba(255, 255, 255, .1);
       }
@@ -261,80 +338,55 @@ export default {
 
       i {
         font-size: 18px;
+
         &:nth-of-type(1) {
           transform: translate(-8px, 1px);
         }
+
         &:nth-of-type(3) {
           font-size: 14px;
         }
       }
     }
   }
+
+  .isHeight {
+    height: auto !important;
+  }
+
   .el-aside {
     background-color: #F5F5F7;
     font-size: 13px;
     color: #303133;
-    overflow-x: hidden!important;
+    overflow-x: hidden !important;
     padding-top: 15px;
     position: relative;
     height: 565px;
     box-sizing: border-box;
 
-    .item-span {
-      padding-left: 10px;
-    }
-
-    ul {
-      font-size: 14px;
-      li {
-        height: 40px;
-        line-height: 40px;
-        width: 100%;
-        cursor: pointer;
-        padding-left: 20px;
-
-        .iconfont {
-          font-size: 18px;
-          margin-right: 10px;
-        }
-      }
-      :hover {
-        background-color: #eeeeee;
-        color: #C62F2F;
-      }
-    }
-
-    .el-collapse {
-      border: 0;
-
-      .el-collapse-item__header {
-        background-color: #F5F5F7;
-        border: 0;
+    .menu-item {
+      .item-span {
         padding-left: 10px;
-
-        .el-collapse-item__arrow {
-          margin: 0 0 0 90px;
-        }
       }
 
-      .el-collapse-item__wrap {
-        background-color: #F5F5F7;
-        border: 0;
+      ul {
+        font-size: 14px;
 
-        :hover {
-          background-color: #eeeeee;
-          color: #C62F2F;
-        }
-
-        .el-collapse-item__content {
-          padding-bottom: 0px;
-          padding-left: 20px;
+        li {
           height: 40px;
           line-height: 40px;
+          width: 100%;
+          cursor: pointer;
+          padding-left: 20px;
 
           .iconfont {
             font-size: 18px;
             margin-right: 10px;
+          }
+
+          &:hover {
+            background-color: #eeeeee;
+            color: #C62F2F;
           }
         }
       }
@@ -354,13 +406,14 @@ export default {
       z-index: 2;
       background-color: #F5F5F7;
 
-      img, p, .mask{
+      .el-image, p, .mask {
         cursor: pointer;
       }
+
       .songInfo {
         display: flex;
         align-items: center;
-        width: 70%;
+        width: 80%;
         position: relative;
 
         .mask {
@@ -382,7 +435,8 @@ export default {
           }
         }
 
-        img, .mask {
+        .el-image, .mask {
+          min-width: 55px;
           width: 55px;
           height: 55px;
         }
@@ -390,11 +444,19 @@ export default {
         .introduce {
           margin-left: 5px;
           font-size: 12px;
+          overflow: hidden;
+
+          p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
       }
 
       .share {
         margin-top: 5px;
+
         p {
           padding: 7px 0;
           margin: 0;
@@ -410,92 +472,38 @@ export default {
       }
     }
   }
+
   .el-footer {
     background-color: #F5F5F7;
     border-top: 1px solid #cccccc;
-
-    .footer_left {
-      height: 60px;
-      width: 170px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-
-      .iconfont {
-        font-size: 20px;
-        background-color: #C62F2F;
-        border-radius: 50%;
-        color: #ffffff;
-        padding: 8px;
-        cursor: pointer;
-      }
-    }
-
-    .footer_slider {
-      display: flex;
-      width: auto;
-      align-items: center;
-      height: 60px;
-
-      .iconfont {
-        cursor: pointer;
-      }
-
-      span {
-        flex: .5;
-        color: #C62F2F;
-
-        &:nth-of-type(2) {
-          margin-left: 15px;
-        }
-      }
-
-      .progress {
-        flex: 8;
-      }
-
-      .volume {
-        flex: 1;
-        transform: translateX(-30px);
-      }
-
-      .el-slider {
-
-        .el-slider__runway {
-          height: 3px;
-          .el-slider__bar {
-            height: 3px;
-            background-color: #C62F2F;
-          }
-
-          .el-tooltip {
-            width: 10px;
-            height: 10px;
-            border: 1px solid #C62F2F;
-          }
-        }
-      }
-    }
-
-    .footer_right {
-      display: flex;
-      align-items: center;
-      height: 60px;
-      justify-content: space-around;
-
-      .iconfont {
-        font-size: 18px;
-        color: #C62F2F;
-        cursor: pointer;
-      }
-
-      .icon-github {
-        font-size: 24px;
-      }
-    }
+    z-index: 999;
   }
+
   .el-container {
     height: 100%;
     overflow: hidden;
+    position: relative;
+
+    .active {
+      background-color: #eeeeee;
+      color: #C62F2F;
+    }
+  }
+
+  .mainMask, .mvDetail {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #F9F9F9;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    transition: all .5s;
+    transform: translateY(100%);
+    overflow: auto;
+  }
+
+  .isMainMask {
+    transform: translateY(0);
   }
 </style>

@@ -11,7 +11,7 @@
             {{item.name}}
           </div>
           <el-image
-            :src="item.picUrl"></el-image>
+            :src="item.picUrl" lazy></el-image>
         </li>
         <p>{{item.copywriter || item.rcmdtext}}</p>
       </div>
@@ -60,10 +60,10 @@ export default {
     .popular {
       min-height: 200px;
       margin-bottom: 20px;
-      width: 150px;
+      width: 165px;
 
       li {
-        height: 150px;
+        height: 165px;
         width: 100%;
         position: relative;
         overflow: hidden;
@@ -88,7 +88,7 @@ export default {
 
         .el-image {
           width: 100%;
-          height: 150px;
+          height: 100%;
         }
       }
 

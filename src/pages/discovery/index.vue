@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="discoveryContainer">
     <!--tab 区域-->
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="个性推荐" name="first">
@@ -63,15 +63,13 @@ export default {
 </script>
 
 <style lang="scss" type="text/scss">
+  .discoveryContainer {
+    padding: 20px;
+  }
   .el-tabs__nav-wrap {
     &:after {
       height: 1px!important;
     }
-  }
-
-  .el-tabs__nav {
-    margin-left: 50%;
-    transform: translateX(-50%)!important;
   }
 
   .el-tab-pane {

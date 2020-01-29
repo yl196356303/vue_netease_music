@@ -12,7 +12,7 @@
           </div>
           <div class="newestContent-image">
             <el-image
-              :src="item.picUrl"></el-image>
+              :src="item.picUrl" lazy></el-image>
             <span class="newestPlay el-icon-caret-right"></span>
           </div>
           <div class="newestContent-Info">
@@ -32,9 +32,6 @@ export default {
       chunkLimit: 5,
       newest: []
     }
-  },
-  created () {
-    // this.getNewest()
   },
   methods: {
     async getNewest () {
@@ -94,6 +91,7 @@ export default {
         display: flex;
         align-items: center;
         padding: 5px 10px;
+        color: #303133;
 
         &:hover {
           background-color: #eeeeee;

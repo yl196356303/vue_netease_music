@@ -12,6 +12,14 @@ import './style/global.css'
 import './assets/icon_font/iconfont.css'
 import './assets/icon_font1/iconfont.css'
 
+// 导入格式化时间插件
+import moment from 'moment'
+
+// 定义全局过滤器
+Vue.filter('dateFormat', function (dateStr, pattern = 'YY-MM-DD HH:mm:ss') {
+  return moment(dateStr).format(pattern)
+})
+
 // 配置请求根路径
 axios.defaults.baseURL = 'http://127.0.12.12:4000'
 // 将 axios 挂载到全局

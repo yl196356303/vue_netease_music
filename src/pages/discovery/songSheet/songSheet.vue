@@ -32,10 +32,6 @@ export default {
       total: 0
     }
   },
-  created () {
-    // this.getSongClass()
-    // this.getSongList()
-  },
   methods: {
     async getSongClass () {
       const { data: res } = await this.$http.get('playlist/hot')
@@ -106,11 +102,11 @@ export default {
         width: auto!important;
       }
     }
-  }
 
-  .active {
-    background-color: rgba(198, 47, 47, .8);
-    color: white;
-    border-radius: 3px;
+    .active {
+      background-color: rgba(198, 47, 47, .8);
+      color: white;
+      border-radius: 3px;
+    }
   }
 </style>

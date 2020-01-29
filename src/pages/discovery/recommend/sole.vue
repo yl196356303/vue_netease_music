@@ -7,7 +7,7 @@
     <ul>
       <li v-for="item in sole" :key="item.id">
         <el-image
-          :src="item.picUrl"></el-image>
+          :src="item.picUrl" lazy></el-image>
         <span class="solePlay el-icon-paperclip"></span>
         <p>{{item.name}}</p>
       </li>

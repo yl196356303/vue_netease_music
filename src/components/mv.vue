@@ -1,15 +1,26 @@
 <template>
   <el-card class="box-card">
-    <div slot="header" class="clearfix">
+    <div v-if="!total" slot="header" class="clearfix">
       <span>推荐MV</span>
       <span>更多</span>
     </div>
     <ul>
-      <div class="mv" v-for="item in recommendMv" :key="item.id">
+      <div
+        class="mv"
+        v-for="item in mvs"
+        :key="item.id"
+        @click="goMvDetail(item.id)">
         <li>
-          <div class="mvContent">{{item.copywriter}}</div>
+          <div class="playCount">
+            <i class="iconfont icon-shipin"></i>
+            <span>{{item.playCount}}</span>
+          </div>
+          <div class="duration" v-if="total">
+            <span>{{item.duration | dateFormat('mm:ss')}}</span>
+          </div>
+          <div class="mvContent" v-if="item.copywriter">{{item.copywriter}}</div>
           <el-image
-            :src="item.picUrl"></el-image>
+            :src="item.picUrl || item.cover" lazy></el-image>
         </li>
         <div class="mvInfo">
           <p>{{item.name}}</p>
@@ -22,23 +33,12 @@
 
 <script>
 export default {
-  data () {
-    return {
-      recommendMv: []
-    }
-  },
-  created () {
-    // this.getMv()
-  },
   methods: {
-    async getMv () {
-      const { data: res } = await this.$http.get('/personalized/mv')
-      if (res.code !== 200) {
-        return this.$message.error('获取数据失败！')
-      }
-      this.recommendMv = res.result
+    goMvDetail (id) {
+      this.$router.push({ name: 'mv', params: { id } })
     }
-  }
+  },
+  props: ['mvs', 'total']
 }
 </script>
 
@@ -75,6 +75,34 @@ export default {
         width: 100%;
         position: relative;
         overflow: hidden;
+
+        .duration, .playCount {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 0 5px;
+          position: absolute;
+          font-size: 12px;
+          color: #ffffff;
+          z-index: 2;
+          left: 0;
+        }
+
+        .duration {
+          bottom: 4px;
+          line-height: 30px;
+          background: linear-gradient(transparent 20%, rgba(0, 0, 0, .5));
+        }
+
+        .playCount {
+          text-align: right;
+          top: 0;
+          line-height: 20px;
+          background: linear-gradient(to right, transparent 70%, rgba(0, 0, 0, .5));
+
+          i {
+            margin-right: 5px;
+          }
+        }
 
         .mvContent, .el-image {
           cursor: pointer;

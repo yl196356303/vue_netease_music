@@ -1,14 +1,14 @@
 <template>
   <el-card class="box-card">
     <ul>
-      <div class="popular" v-for="item in list" :key="item.id * Math.random()">
+      <div class="popular" v-for="item in list" :key="item.id * Math.random()" @click="goDetail(item.id)">
         <li>
           <div class="popularInfo">
             <span class="el-icon-user"></span>
             {{item.creator.nickname}}
           </div>
           <el-image
-            :src="item.coverImgUrl"></el-image>
+            :src="item.coverImgUrl" lazy></el-image>
           <span class="popularPlay el-icon-caret-right"></span>
         </li>
         <p>{{item.name}}</p>
@@ -19,6 +19,11 @@
 
 <script>
 export default {
+  methods: {
+    goDetail (id) {
+      this.$router.push({ name: 'playlist', params: { id } })
+    }
+  },
   props: ['list', 'more']
 }
 </script>

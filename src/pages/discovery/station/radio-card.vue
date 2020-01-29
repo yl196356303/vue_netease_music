@@ -107,7 +107,7 @@ export default {
           line-height: 90px;
           position: relative;
           cursor: pointer;
-          margin-right: 49px;
+          margin-right: 52px;
           border-radius: 5px;
 
           &:hover {

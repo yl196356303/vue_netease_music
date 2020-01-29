@@ -34,6 +34,20 @@
       "unicode_decimal": 58941
     },
     {
+      "icon_id": "6416945",
+      "name": "列表循环",
+      "font_class": "liebiaoxunhuan",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "6660766",
+      "name": "点赞",
+      "font_class": "dianzan",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
       "icon_id": "9307591",
       "name": "github",
       "font_class": "github",

@@ -23,3 +23,12 @@ ul {
 .el-card__body {
     padding: 10px 0;
 }
+
+.el-main {
+    padding: 0;
+}
+
+.el-tabs__nav {
+    margin-left: 50%;
+    transform: translateX(-50%)!important;
+}

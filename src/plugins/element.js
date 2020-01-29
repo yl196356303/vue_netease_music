@@ -21,7 +21,10 @@ import {
   Image,
   Card,
   Divider,
-  Pagination
+  Pagination,
+  Table,
+  TableColumn,
+  Tooltip
 } from 'element-ui'
 
 Vue.use(Button)
@@ -45,6 +48,9 @@ Vue.use(Image)
 Vue.use(Card)
 Vue.use(Divider)
 Vue.use(Pagination)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Tooltip)
 
 //  把 Message 弹窗消息挂在到全局
 Vue.prototype.$message = Message
