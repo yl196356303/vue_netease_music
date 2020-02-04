@@ -1,7 +1,11 @@
 <template>
   <el-card class="box-card">
     <ul>
-      <div class="popular" v-for="item in list" :key="item.id * Math.random()" @click="goDetail(item.id)">
+      <div
+        class="popular"
+        v-for="item in list"
+        :key="item.id * Math.random()"
+        @click="goDetail(item.id)">
         <li>
           <div class="popularInfo">
             <span class="el-icon-user"></span>
@@ -24,7 +28,7 @@ export default {
       this.$router.push({ name: 'playlist', params: { id } })
     }
   },
-  props: ['list', 'more']
+  props: ['list']
 }
 </script>
 

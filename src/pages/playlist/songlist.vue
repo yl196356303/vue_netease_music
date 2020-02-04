@@ -42,7 +42,7 @@
       </el-table-column>
     </el-table>
     <div class="empty" v-if="keyWords && !search.length">
-      未找到和
+      未找到与
       <span>“{{keyWords}}”</span>
       相关的任何音乐
     </div>

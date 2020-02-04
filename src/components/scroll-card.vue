@@ -6,10 +6,16 @@
     :data="currentLyric.lines">
     <div>
       <div class="lyrics">
-        <p v-for="(line, index) in currentLyric.lines"
-           :key="index"
-           ref="lyricLine"
-           :class="getActiveCls(index)">{{line.txt}}</p>
+        <div
+          v-if="JSON.stringify(currentLyric) === '{}' || !currentLyric.lines.length"
+          class="empty">还没有歌词哦~
+        </div>
+        <p
+          v-else
+          v-for="(line, index) in currentLyric.lines"
+          :key="index"
+          ref="lyricLine"
+          :class="getActiveCls(index)">{{line.txt}}</p>
       </div>
     </div>
   </Scroll>
@@ -36,6 +42,10 @@ export default {
         const { data: res } = await this.$http.get(`lyric?id=${this.currentSongId}`)
         if (res.code !== 200) {
           return this.$message.error('歌词获取失败')
+        }
+        if (!res.lrc) {
+          this.lyric({})
+          return -1
         }
         const lyric = new Lyric(res.lrc.lyric, this.handleLyric)
         this.lyric(lyric)
@@ -84,6 +94,7 @@ export default {
         return
       }
       if (JSON.stringify(this.currentLyric) !== '{}') {
+        this.currentLineNum = 0
         this.currentLyric.stop()
       }
       this.getLyric()
@@ -100,6 +111,10 @@ export default {
 
     .lyrics {
       font-size: 13px;
+
+      .empty {
+        font-size: 18px;
+      }
 
       p {
         margin: 0 0 20px 0;

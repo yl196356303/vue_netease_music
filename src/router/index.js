@@ -11,8 +11,16 @@ import Local from '../pages/local/index.vue'
 import Download from '../pages/download/index.vue'
 import Cloud from '../pages/cloud/index.vue'
 import Collection from '../pages/collection/index.vue'
-import Myestablish from '../pages/Myestablish/index.vue'
-import Mycollection from '../pages/Mycollection/index.vue'
+import Search from '../pages/search/index.vue'
+import searchSongs from '../pages/search/songs.vue'
+import searchPlayLists from '../pages/search/playlists.vue'
+import searchMvs from '../pages/search/mvs.vue'
+
+//  修复vue-router 重复点击路由报错的bug
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 Vue.use(VueRouter)
 
@@ -35,8 +43,29 @@ const routes = [
       { path: '/download', name: 'download', component: Download },
       { path: '/cloud', name: 'cloud', component: Cloud },
       { path: '/collection', name: 'collection', component: Collection },
-      { path: '/myestablish', name: 'myestablish', component: Myestablish },
-      { path: '/mycollection', name: 'mycollection', component: Mycollection }
+      {
+        path: '/search/:keywords',
+        name: 'search',
+        component: Search,
+        redirect: '/search/:keywords/songs',
+        children: [
+          {
+            path: 'songs',
+            name: 'searchSongs',
+            component: searchSongs
+          },
+          {
+            path: 'playlists',
+            name: 'searchPlayLists',
+            component: searchPlayLists
+          },
+          {
+            path: 'mvs',
+            name: 'searchMvs',
+            component: searchMvs
+          }
+        ]
+      }
     ]
   }
 ]

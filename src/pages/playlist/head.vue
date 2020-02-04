@@ -1,6 +1,8 @@
 <template>
   <div class="headContainer">
-    <div class="headImg">
+    <div
+      v-if="playObj.coverImgUrl"
+      class="headImg">
       <el-image :src="playObj.coverImgUrl"></el-image>
     </div>
     <div class="headInfo">
@@ -19,14 +21,14 @@
         <span>播放全部</span>
       </div>
       <div class="headInfo-tag">
-        <p>
+        <p v-if=" playObj.tags.length">
           标签：
           <span v-for="(item, index) in playObj.tags" :key="index">
             {{item}}
             <i v-if="playObj.tags.length - 1 !== index">/</i>
           </span>
         </p>
-        <p>简介：{{playObj.description}}</p>
+        <p v-if="playObj.description">简介：{{playObj.description}}</p>
       </div>
     </div>
   </div>

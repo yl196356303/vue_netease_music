@@ -5,6 +5,7 @@
         <p class="title">mv详情</p>
         <div class="mv">
           <video
+            @play="handlePlay"
             controls
             class="video"
             v-if="mvUrl.brs"
@@ -42,6 +43,7 @@
 <script>
 import Comment from '../../components/comments.vue'
 import Mv from '../../components/mv.vue'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
@@ -71,7 +73,12 @@ export default {
         return this.$message.error('相关推荐数据获取失败！')
       }
       this.mvs = res.mvs
-    }
+    },
+    handlePlay () {
+      this.onPause()
+    },
+
+    ...mapActions(['onPause'])
   },
   computed: {
     id () {

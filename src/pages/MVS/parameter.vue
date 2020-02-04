@@ -112,8 +112,6 @@ export default {
           item.playCount = item.playCount.slice(0, item.playCount.length - 4) + '万'
         }
       })
-      console.log(res)
-      console.log(this.page)
       this.mvs = res.data
       if (this.page === 1) {
         console.log('进来了')

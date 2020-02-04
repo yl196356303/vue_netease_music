@@ -24,7 +24,9 @@ import {
   Pagination,
   Table,
   TableColumn,
-  Tooltip
+  Tooltip,
+  Form,
+  FormItem
 } from 'element-ui'
 
 Vue.use(Button)
@@ -51,6 +53,8 @@ Vue.use(Pagination)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Tooltip)
+Vue.use(Form)
+Vue.use(FormItem)
 
 //  把 Message 弹窗消息挂在到全局
 Vue.prototype.$message = Message
