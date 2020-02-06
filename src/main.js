@@ -6,7 +6,7 @@ import './plugins/element.js'
 import axios from 'axios'
 
 // 导入全局样式
-import './style/global.css'
+import './style/global.scss'
 
 // 导入字体图标样式
 import './assets/icon_font/iconfont.css'
@@ -21,7 +21,8 @@ Vue.filter('dateFormat', function (dateStr, pattern = 'YY-MM-DD HH:mm:ss') {
 })
 
 // 配置请求根路径
-axios.defaults.baseURL = 'http://127.0.12.12:4000'
+// axios.defaults.baseURL = 'http://127.0.12.12:4000'
+axios.defaults.baseURL = 'https://api.mtnhao.com/'
 // 将 axios 挂载到全局
 Vue.prototype.$http = axios
 

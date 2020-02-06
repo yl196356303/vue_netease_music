@@ -59,6 +59,7 @@ export default {
   },
   [HANDLE_CLEAR_PLAY_RECORD] (state) {
     state.playRecord = []
+    window.localStorage.removeItem('playRecord')
   },
   [CLEAR_CURRENT_SONG] (state) {
     state.currentSong = {}
