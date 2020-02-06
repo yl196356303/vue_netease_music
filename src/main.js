@@ -20,7 +20,7 @@ Vue.filter('dateFormat', function (dateStr, pattern = 'YY-MM-DD HH:mm:ss') {
   return moment(dateStr).format(pattern)
 })
 
-// 配置请求根路径
+// 配置请求根路径  1111
 axios.defaults.baseURL = 'http://127.0.12.12:4000'
 // 将 axios 挂载到全局
 Vue.prototype.$http = axios
