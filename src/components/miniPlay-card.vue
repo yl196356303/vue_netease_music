@@ -1,69 +1,61 @@
 <template>
   <div class="miniPlayContainer">
-    <el-row>
-      <el-col :span="3">
-        <div class="footer_left">
-          <span class="iconfont icon-ai10" @click="lastOne"></span>
-          <span :class="iconIsPlaying" @click="startPlayOrPause"></span>
-          <span class="iconfont icon-ai09" @click="nextOne"></span>
-        </div>
-      </el-col>
-      <el-col :span="18">
-        <div class="footer_slider">
-          <audio
-            v-if="currentSong"
-            @play="onPlay"
-            @pause="onPause"
-            ref="audioRef"
-            @loadeddata="getAudioDuration"
-            @timeupdate="getCurrentTime"
-            @ended="handlePlayEnd"
-            :src="currentSong.url">
-          </audio>
-          <span>{{currentTime * 1000 | dateFormat('mm:ss')}}</span>
-          <Progress
-            class="progress"
-            ref="progressRef"
-            @update="onChildClick"/>
-          <span>{{currentSong.dt || currentSong.duration || 0 | dateFormat('mm:ss')}}</span>
-          <span :class="iconVolume"></span>
-          <el-slider
-            class="volume"
-            @change="volumeChange"
-            v-model="volume">
-          </el-slider>
-        </div>
-      </el-col>
-      <el-col :span="3">
-        <div class="footer_right">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="playModelObj.content"
-            placement="top"
-            :enterable="false">
+    <div class="footer_left">
+      <span class="iconfont icon-ai10" @click="lastOne"></span>
+      <span :class="iconIsPlaying" @click="startPlayOrPause"></span>
+      <span class="iconfont icon-ai09" @click="nextOne"></span>
+    </div>
+    <div class="footer_slider">
+      <audio
+        v-if="currentSong"
+        @play="onPlay"
+        @pause="onPause"
+        ref="audioRef"
+        @loadeddata="getAudioDuration"
+        @timeupdate="getCurrentTime"
+        @ended="handlePlayEnd"
+        :src="currentSong.url">
+      </audio>
+      <span>{{currentTime * 1000 | dateFormat('mm:ss')}}</span>
+      <Progress
+        class="progress"
+        ref="progressRef"
+        @update="onChildClick"/>
+      <span>{{currentSong.dt || currentSong.duration || 0 | dateFormat('mm:ss')}}</span>
+      <span :class="iconVolume"></span>
+      <el-slider
+        class="volume"
+        @change="volumeChange"
+        v-model="volume">
+      </el-slider>
+    </div>
+    <div class="footer_right">
+      <el-tooltip
+        class="item"
+        effect="dark"
+        :content="playModelObj.content"
+        placement="top"
+        :enterable="false">
             <span
               @click="handlePlayModel"
               :class="'iconfont ' + playModelObj.icon">
             </span>
-          </el-tooltip>
-          <el-tooltip
-            :value="playTips"
-            :manual="playTipsManual"
-            class="item"
-            effect="dark"
-            content="开始播放歌曲"
-            placement="top"
-            :enterable="false">
+      </el-tooltip>
+      <el-tooltip
+        :value="playTips"
+        :manual="playTipsManual"
+        class="item"
+        effect="dark"
+        content="开始播放歌曲"
+        placement="top"
+        :enterable="false">
           <span
             class="iconfont icon-plist"
             @click="handlePlaylistShowOrHide">
           </span>
-          </el-tooltip>
-          <span class="iconfont icon-github"></span>
-        </div>
-      </el-col>
-    </el-row>
+      </el-tooltip>
+      <span class="iconfont icon-github"></span>
+    </div>
   </div>
 </template>
 
@@ -314,13 +306,14 @@ export default {
 
 <style lang="scss" type="text/scss">
   .miniPlayContainer {
+    display: flex;
 
     .footer_left {
       height: 60px;
-      width: 170px;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-evenly;
       align-items: center;
+      flex: 3;
 
       .iconfont {
         font-size: 20px;
@@ -337,6 +330,7 @@ export default {
       width: auto;
       align-items: center;
       height: 60px;
+      flex: 18;
 
       .iconfont {
         cursor: pointer;
@@ -357,7 +351,7 @@ export default {
 
       .volume {
         flex: 1;
-        transform: translateX(-30px);
+        margin-left: -2.5%;
       }
 
       .el-slider {
@@ -384,6 +378,7 @@ export default {
       align-items: center;
       height: 60px;
       justify-content: space-around;
+      flex: 3;
 
       .iconfont {
         font-size: 18px;

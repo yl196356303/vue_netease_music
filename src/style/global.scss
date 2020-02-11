@@ -33,6 +33,7 @@ ul {
   transform: translateX(-50%) !important;
 }
 
+// scroll
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -51,5 +52,22 @@ ul {
 :hover::-webkit-scrollbar-track {
   background: hsla(0, 0%, 53%, 0.1);
 }
+
+$theme-color: #C62F2F;
+// loading
+.el-loading-spinner {
+  circle {
+    stroke: $theme-color !important;
+  }
+
+  .el-loading-text {
+    color: $theme-color !important;
+  }
+
+  .el-icon-loading {
+    color: $theme-color !important;
+  }
+}
+
 
 

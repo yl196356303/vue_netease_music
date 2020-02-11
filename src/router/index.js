@@ -1,20 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../components/Home.vue'
-import Discovery from '../pages/discovery/index.vue'
-import Playlist from '../pages/playlist/index.vue'
-import FM from '../pages/FM/index.vue'
-import MVS from '../pages/MVS/index.vue'
-import MV from '../pages/MV/index.vue'
-import Dynamic from '../pages/dynamic/index.vue'
-import Local from '../pages/local/index.vue'
-import Download from '../pages/download/index.vue'
-import Cloud from '../pages/cloud/index.vue'
-import Collection from '../pages/collection/index.vue'
-import Search from '../pages/search/index.vue'
-import searchSongs from '../pages/search/songs.vue'
-import searchPlayLists from '../pages/search/playlists.vue'
-import searchMvs from '../pages/search/mvs.vue'
+
+const Home = () => import('../components/Home.vue')
+const Discovery = () => import('../pages/discovery/index.vue')
+const Playlist = () => import('../pages/playlist/index.vue')
+const FM = () => import('../pages/FM/index.vue')
+const MVS = () => import('../pages/MVS/index.vue')
+const MV = () => import('../pages/MV/index.vue')
+const Dynamic = () => import('../pages/dynamic/index.vue')
+const Local = () => import('../pages/local/index.vue')
+const Download = () => import('../pages/download/index.vue')
+const Cloud = () => import('../pages/cloud/index.vue')
+const Collection = () => import('../pages/collection/index.vue')
+const Search = () => import('../pages/search/index.vue')
+const searchSongs = () => import('../pages/search/songs.vue')
+const searchPlayLists = () => import('../pages/search/playlists.vue')
+const searchMvs = () => import('../pages/search/mvs.vue')
 
 //  修复vue-router 重复点击路由报错的bug
 const originalPush = VueRouter.prototype.push

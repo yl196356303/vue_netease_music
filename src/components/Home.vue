@@ -7,8 +7,8 @@
         <span>网易云音乐</span>
       </div>
       <div class="home_header_left">
-        <i class="el-icon-arrow-left"></i>
-        <i class="el-icon-arrow-right"></i>
+        <i class="el-icon-arrow-left" @click="back"></i>
+        <i class="el-icon-arrow-right" @click="forward "></i>
         <el-input
           @focus="showSearch"
           @blur="hideSearch"
@@ -377,6 +377,12 @@ export default {
           this.title.splice(index, 2)
         }
       })
+    },
+    back () {
+      this.$router.go(-1)
+    },
+    forward () {
+      this.$router.go(1)
     },
 
     ...mapActions(['switchIsLyric'])
