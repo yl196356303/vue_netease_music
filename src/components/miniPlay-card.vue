@@ -54,7 +54,8 @@
             @click="handlePlaylistShowOrHide">
           </span>
       </el-tooltip>
-      <span class="iconfont icon-github"></span>
+      <span
+        class="iconfont icon-github" @click="linkGithub"></span>
     </div>
   </div>
 </template>
@@ -250,6 +251,9 @@ export default {
           this.playModelObj = this.playModel[this.playModelIndex]
         }
       }
+    },
+    linkGithub () {
+      window.open('https://github.com/yl196356303/vue_netease_music')
     },
 
     ...mapActions([
