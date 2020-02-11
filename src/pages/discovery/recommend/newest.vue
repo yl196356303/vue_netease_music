@@ -5,8 +5,15 @@
       <span>更多</span>
     </div>
     <div class="newestContainer">
-      <div class="newestContent" v-for="(list, index) in thunkedList" :key="index">
-        <li :class="(index1 + 1) % 2 === 0 ? 'active' : ''" v-for="(item, index1) in thunkedList[index]" :key="item.id">
+      <div
+        class="newestContent"
+        v-for="(list, index) in thunkedList"
+        :key="index">
+        <li
+          :class="(index1 + 1) % 2 === 0 ? 'active' : ''"
+          v-for="(item, index1) in thunkedList[index]"
+          :key="item.id"
+          @dblclick="ondblclick(item)">
           <div class="newestContent-index">
             <span>{{index && index1 === 4 ? null : 0}}{{index === 1 ? index1 + 6 : index1 + 1}}</span>
           </div>
@@ -26,6 +33,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   data () {
     return {
@@ -40,7 +49,16 @@ export default {
         return this.$message.error('获取数据失败！')
       }
       this.newest = res.result
-    }
+    },
+    async ondblclick (row) {
+      const { data: res } = await this.$http.get(`song/detail?ids=${row.id}`)
+      if (res.code !== 200) {
+        return this.$message.error('播放失败！')
+      }
+      this.handleDbClick(res.songs[0])
+    },
+
+    ...mapActions(['handleDbClick'])
   },
   computed: {
     thunkedList () {
@@ -132,6 +150,6 @@ export default {
   }
 
   .active {
-    background-color: #19fffa;
+    background-color: #eeeef8 !important;
   }
 </style>
