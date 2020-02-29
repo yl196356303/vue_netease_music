@@ -22,7 +22,7 @@ Vue.filter('dateFormat', function (dateStr, pattern = 'YY-MM-DD HH:mm:ss') {
 })
 
 // 配置请求根路径
-axios.defaults.baseURL = 'http://127.0.12.12:4000'
+axios.defaults.baseURL = 'https://api.mtnhao.com/'
 // 拦截器
 mixinLoading(axios.interceptors)
 let loading
